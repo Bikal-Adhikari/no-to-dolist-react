@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const Form = () => {
+export const Form = ({ addNewTask }) => {
   // local state
 
   const [form, setForm] = useState({});
@@ -16,6 +16,7 @@ export const Form = () => {
 
   const handelOnSubmit = (e) => {
     e.preventDefault();
+    addNewTask(form);
   };
 
   return (
