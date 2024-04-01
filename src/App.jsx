@@ -9,13 +9,13 @@ function App() {
   const addNewTask = (taskObj) => {
     setEntryList([...entryList, taskObj]);
   };
-  console.log(entryList);
+
   return (
     <div className="wrapper vh-100 pt-5">
       <div className="container">
         <Title />
         <Form addNewTask={addNewTask} />
-        <Table />
+        <Table entryList={entryList} />
         <div className="alert alert-success" role="alert">
           The total hours allocated = <span id="ttlHrs">0</span>hrs
         </div>

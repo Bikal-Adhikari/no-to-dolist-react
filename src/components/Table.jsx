@@ -1,6 +1,8 @@
 import React from "react";
 
-export const Table = () => {
+export const Table = ({ entryList }) => {
+  const entries = entryList.filter((item) => item.type === "entry");
+  const badEntries = entryList.filter((item) => item.type === "bad");
   return (
     <div className="row mt-5 gap-2">
       {/* <!-- entry list --> */}
@@ -8,7 +10,33 @@ export const Table = () => {
         <h3 className="text-center">Entry List</h3>
         <hr />
         <table className="table table-striped table-hover">
-          <tbody id="entryList"></tbody>
+          <tbody id="entryList">
+            {entries.map((item, i) => (
+              <tr key={i}>
+                <th>{i + 1}</th>
+                <td>{item.task}</td>
+                <td>{item.hr}hrs</td>
+                <td className="text-end">
+                  <button
+                    onClick="handOnDelete('{
+             item.id
+           }')"
+                    className="btn btn-danger btn-sm"
+                  >
+                    <i className="fa-solid fa-trash"></i>
+                  </button>
+                  <button
+                    onClick="switchTask('{
+             item.id
+           }', 'bad')"
+                    className="btn btn-success btn-sm"
+                  >
+                    <i className="fa-sharp fa-solid fa-arrow-right-long"></i>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 

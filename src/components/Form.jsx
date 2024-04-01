@@ -3,7 +3,9 @@ import React, { useState } from "react";
 export const Form = ({ addNewTask }) => {
   // local state
 
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    type: "entry",
+  });
   // create a function that receives the form data and updates to the local state
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -16,7 +18,24 @@ export const Form = ({ addNewTask }) => {
 
   const handelOnSubmit = (e) => {
     e.preventDefault();
-    addNewTask(form);
+    const obj = {
+      ...form,
+      id: randomIdGenerator(),
+    };
+    addNewTask(obj);
+  };
+
+  const randomIdGenerator = () => {
+    const idLength = 6;
+    const str =
+      "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890";
+
+    let id = "";
+    for (let i = 0; i < idLength; i++) {
+      const randomPosition = Math.floor(Math.random() * str.length);
+      id += str[randomPosition];
+    }
+    return id;
   };
 
   return (
