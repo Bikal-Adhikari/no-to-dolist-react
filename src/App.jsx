@@ -4,9 +4,13 @@ import { Form } from "./components/Form";
 import { Table } from "./components/Table";
 import { Title } from "./components/Title";
 
+const ttlPerWk = 24 * 7;
 function App() {
   const [entryList, setEntryList] = useState([]);
   const addNewTask = (taskObj) => {
+    if (total + taskObj.hr > ttlPerWk) {
+      return alert("Sorry Boss not enough hours left to fit this task");
+    }
     setEntryList([...entryList, taskObj]);
   };
   const switchTask = (id, type) => {
@@ -15,6 +19,7 @@ function App() {
 
       return item;
     });
+
     setEntryList(tempArg);
   };
 
@@ -23,6 +28,10 @@ function App() {
       setEntryList(entryList.filter((item) => item.id !== id));
     }
   };
+
+  const total = entryList.reduce((acc, item) => {
+    return acc + item.hr;
+  }, 0);
 
   return (
     <div className="wrapper vh-100 pt-5">
@@ -35,7 +44,8 @@ function App() {
           handOnDelete={handOnDelete}
         />
         <div className="alert alert-success" role="alert">
-          The total hours allocated = <span id="ttlHrs">0</span>hrs
+          The total hours allocated = <span id="ttlHrs">{total}</span>
+          hrs
         </div>
       </div>
     </div>

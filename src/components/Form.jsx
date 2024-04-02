@@ -12,7 +12,7 @@ export const Form = ({ addNewTask }) => {
 
     setForm({
       ...form,
-      [name]: value,
+      [name]: name === "hr" ? +value : value,
     });
   };
 

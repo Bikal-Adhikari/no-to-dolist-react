@@ -3,6 +3,9 @@ import React from "react";
 export const Table = ({ entryList, switchTask, handOnDelete }) => {
   const entries = entryList.filter((item) => item.type === "entry");
   const badList = entryList.filter((item) => item.type === "bad");
+  const ttlBad = badList.reduce((acc, item) => {
+    return acc + item.hr;
+  }, 0);
   return (
     <div className="row mt-5 gap-2">
       {/* <!-- entry list --> */}
@@ -69,7 +72,8 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
           </tbody>
         </table>
         <div className="alert alert-success" role="alert">
-          You could have saved = <span id="total-bad">0</span>hrs last week
+          You could have saved = <span id="total-bad">{ttlBad}</span>hrs last
+          week
         </div>
       </div>
     </div>
