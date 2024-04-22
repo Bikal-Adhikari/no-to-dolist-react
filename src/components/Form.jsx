@@ -1,28 +1,32 @@
 import React, { useState } from "react";
+import { postNewTask } from "../utils/axiosHelper";
 
+const initialState = {
+  task: "",
+  hr: "",
+  type: "entry",
+};
 export const Form = ({ addNewTask }) => {
   // local state
 
-  const [form, setForm] = useState({
-    type: "entry",
-  });
+  const [form, setForm] = useState(initialState);
+
+  const [response, setResponse] = useState({});
   // create a function that receives the form data and updates to the local state
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-
+    response.message && setResponse({});
     setForm({
       ...form,
       [name]: name === "hr" ? +value : value,
     });
   };
 
-  const handelOnSubmit = (e) => {
+  const handelOnSubmit = async (e) => {
     e.preventDefault();
-    const obj = {
-      ...form,
-      id: randomIdGenerator(),
-    };
-    addNewTask(obj);
+    const result = await postNewTask(form);
+    setResponse(result);
+    result.status === "success" && setForm(initialState);
   };
 
   const randomIdGenerator = () => {
@@ -41,6 +45,19 @@ export const Form = ({ addNewTask }) => {
   return (
     <form onSubmit={handelOnSubmit}>
       <div className="row g-2 mt-5 shadow-lg border p-5 rounded">
+        {response.message && (
+          <div className="row">
+            <div
+              className={
+                response.status === "success"
+                  ? "alert alert-success"
+                  : "alert alert-danger"
+              }
+            >
+              {response.message}
+            </div>
+          </div>
+        )}
         <div className="col-md-7">
           <input
             type="text"
@@ -51,6 +68,7 @@ export const Form = ({ addNewTask }) => {
             required
             // call the function on onChange event of the inputfield
             onChange={handleOnChange}
+            value={form.task}
           />
         </div>
         <div className="col-md-2">
@@ -63,6 +81,7 @@ export const Form = ({ addNewTask }) => {
             required
             min="1"
             onChange={handleOnChange}
+            value={form.hr}
           />
         </div>
         <div className="col-md-3 d-grid">
