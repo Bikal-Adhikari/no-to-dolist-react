@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { Form } from "./components/Form";
 import { Table } from "./components/Table";
 import { Title } from "./components/Title";
+import { getAllTasks } from "./utils/axiosHelper";
 
 const ttlPerWk = 24 * 7;
 function App() {
   const [entryList, setEntryList] = useState([]);
+  useEffect(() => {
+    fetchAllTasks();
+  }, []);
+
   const addNewTask = (taskObj) => {
     if (total + taskObj.hr > ttlPerWk) {
       return alert("Sorry Boss not enough hours left to fit this task");
@@ -23,6 +28,12 @@ function App() {
     setEntryList(tempArg);
   };
 
+  const fetchAllTasks = async () => {
+    const { status, task } = await getAllTasks();
+    console.log(task);
+    status === "success" && setEntryList(task);
+  };
+
   const handOnDelete = (id) => {
     if (window.confirm("Are you sure, you want to delete the item?")) {
       setEntryList(entryList.filter((item) => item.id !== id));
@@ -37,7 +48,7 @@ function App() {
     <div className="wrapper vh-100 pt-5">
       <div className="container">
         <Title />
-        <Form addNewTask={addNewTask} />
+        <Form addNewTask={addNewTask} fetchAllTasks={fetchAllTasks} />
         <Table
           entryList={entryList}
           switchTask={switchTask}

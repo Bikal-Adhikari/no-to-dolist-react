@@ -14,3 +14,17 @@ export const postNewTask = async (taskObj) => {
     };
   }
 };
+
+export const getAllTasks = async () => {
+  try {
+    const { data } = await axios.get(apiEP);
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+    return {
+      status: "error",
+      message: error.message,
+    };
+  }
+};

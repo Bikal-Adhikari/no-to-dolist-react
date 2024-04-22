@@ -6,7 +6,7 @@ const initialState = {
   hr: "",
   type: "entry",
 };
-export const Form = ({ addNewTask }) => {
+export const Form = ({ fetchAllTasks }) => {
   // local state
 
   const [form, setForm] = useState(initialState);
@@ -26,7 +26,10 @@ export const Form = ({ addNewTask }) => {
     e.preventDefault();
     const result = await postNewTask(form);
     setResponse(result);
-    result.status === "success" && setForm(initialState);
+    if (result.status === "success") {
+      setForm(initialState);
+      fetchAllTasks();
+    }
   };
 
   const randomIdGenerator = () => {
