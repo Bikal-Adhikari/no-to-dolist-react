@@ -3,29 +3,17 @@ import "./App.css";
 import { Form } from "./components/Form";
 import { Table } from "./components/Table";
 import { Title } from "./components/Title";
-import { getAllTasks } from "./utils/axiosHelper";
+import { deleteTasks, getAllTasks, updateTask } from "./utils/axiosHelper";
 
-const ttlPerWk = 24 * 7;
 function App() {
   const [entryList, setEntryList] = useState([]);
   useEffect(() => {
     fetchAllTasks();
   }, []);
 
-  const addNewTask = (taskObj) => {
-    if (total + taskObj.hr > ttlPerWk) {
-      return alert("Sorry Boss not enough hours left to fit this task");
-    }
-    setEntryList([...entryList, taskObj]);
-  };
-  const switchTask = (id, type) => {
-    const tempArg = entryList.map((item) => {
-      if (item.id === id) item.type = type;
-
-      return item;
-    });
-
-    setEntryList(tempArg);
+  const switchTask = async (_id, type) => {
+    const { status } = await updateTask({ _id, type });
+    status === "success" && fetchAllTasks();
   };
 
   const fetchAllTasks = async () => {
@@ -34,9 +22,13 @@ function App() {
     status === "success" && setEntryList(task);
   };
 
-  const handOnDelete = (id) => {
+  const handOnDelete = async (_id) => {
     if (window.confirm("Are you sure, you want to delete the item?")) {
-      setEntryList(entryList.filter((item) => item.id !== id));
+      const { status, message } = await deleteTasks({ _id });
+      if (status === "success") {
+        fetchAllTasks();
+        alert(message);
+      }
     }
   };
 
@@ -48,7 +40,7 @@ function App() {
     <div className="wrapper vh-100 pt-5">
       <div className="container">
         <Title />
-        <Form addNewTask={addNewTask} fetchAllTasks={fetchAllTasks} />
+        <Form total={total} fetchAllTasks={fetchAllTasks} />
         <Table
           entryList={entryList}
           switchTask={switchTask}

@@ -6,7 +6,8 @@ const initialState = {
   hr: "",
   type: "entry",
 };
-export const Form = ({ fetchAllTasks }) => {
+const ttlPerWk = 24 * 7;
+export const Form = ({ total, fetchAllTasks }) => {
   // local state
 
   const [form, setForm] = useState(initialState);
@@ -24,25 +25,16 @@ export const Form = ({ fetchAllTasks }) => {
 
   const handelOnSubmit = async (e) => {
     e.preventDefault();
+
+    if (total + form.hr > ttlPerWk) {
+      return alert("Sorry Boss not enough hours left to fit this task");
+    }
     const result = await postNewTask(form);
     setResponse(result);
     if (result.status === "success") {
       setForm(initialState);
       fetchAllTasks();
     }
-  };
-
-  const randomIdGenerator = () => {
-    const idLength = 6;
-    const str =
-      "qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890";
-
-    let id = "";
-    for (let i = 0; i < idLength; i++) {
-      const randomPosition = Math.floor(Math.random() * str.length);
-      id += str[randomPosition];
-    }
-    return id;
   };
 
   return (

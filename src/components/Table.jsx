@@ -13,19 +13,19 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
         <table className="table table-striped table-hover">
           <tbody id="entry">
             {entries.map((item, i) => (
-              <tr key={i}>
+              <tr key={item._id}>
                 <th>{i + 1}</th>
                 <td>{item.task}</td>
                 <td>{item.hr}hrs</td>
                 <td className="text-end">
                   <button
-                    onClick={() => handOnDelete(item.id)}
+                    onClick={() => handOnDelete(item._id)}
                     className="btn btn-danger btn-sm"
                   >
                     <i className="fa-solid fa-trash"></i>
                   </button>
                   <button
-                    onClick={() => switchTask(item.id, "bad")}
+                    onClick={() => switchTask(item._id, "bad")}
                     className="btn btn-success btn-sm"
                   >
                     <i className="fa-sharp fa-solid fa-arrow-right-long"></i>
@@ -44,13 +44,13 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
         <table className="table table-striped table-hover">
           <tbody id="bad">
             {badList.map((item, i) => (
-              <tr key={i}>
+              <tr key={item._id}>
                 <th>{i + 1}</th>
                 <td>{item.task}</td>
                 <td>{item.hr}hrs</td>
                 <td className="text-end">
                   <button
-                    onClick={() => switchTask(item.id, "entry")}
+                    onClick={() => switchTask(item._id, "entry")}
                     className="btn btn-warning btn-sm"
                   >
                     <i
@@ -59,7 +59,7 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
                     ></i>
                   </button>
                   <button
-                    onClick={() => handOnDelete(item.id)}
+                    onClick={() => handOnDelete(item._id)}
                     className="btn btn-danger btn-sm"
                   >
                     <i className="fa-solid fa-trash"></i>
