@@ -46,6 +46,7 @@ function App() {
           switchTask={switchTask}
           handOnDelete={handOnDelete}
         />
+
         <div className="alert alert-success" role="alert">
           The total hours allocated = <span id="ttlHrs">{total}</span>
           hrs
