@@ -22,27 +22,16 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
   const handelOnSelectAll = (e) => {
     const { checked, value } = e.target;
     console.log(checked, value);
-    if (value === "entry") {
-      if (checked) {
-        // get all ids of entry and add to Idsto delete
-        const allIds = entries.map((entry) => entry._id);
-        setIdsToDelete((prevIds) => [...prevIds, ...allIds]);
-      } else {
-        // remove all ids of entry and add to Idsto delete
-        setIdsToDelete([]);
-      }
-    }
-    if (value === "bad") {
-      if (checked) {
-        // get all ids of bad and add to Idstodelete
-        const allBadIds = badList.map((bad) => bad._id);
-        setIdsToDelete((prevIds) => [...prevIds, ...allBadIds]);
-      } else {
-        // remove all ids of bad and add to Idstodelete
-        setIdsToDelete([]);
-      }
-    }
+    const ids =
+      value === "entry"
+        ? entries.map((entry) => entry._id)
+        : badList.map((bad) => bad._id);
+
+    checked
+      ? setIdsToDelete([...idsToDelete, ...ids])
+      : setIdsToDelete(idsToDelete.filter((id) => !ids.includes(id)));
   };
+
   console.log(idsToDelete);
 
   return (
@@ -72,6 +61,7 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
                       className="form-check-input"
                       onChange={handelOnSelect}
                       value={item._id}
+                      checked={idsToDelete.includes(item._id)}
                     />
                   </td>
                   <th>{i + 1}</th>
@@ -109,7 +99,7 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
               onChange={handelOnSelectAll}
               value="bad"
             />
-            <label htmlFor="selectEntryList">Select all entry list</label>
+            <label htmlFor="selectEntryList">Select all Bad list</label>
           </div>
           <table className="table table-striped table-hover">
             <tbody id="bad">
@@ -121,6 +111,7 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
                       className="form-check-input"
                       onChange={handelOnSelect}
                       value={item._id}
+                      checked={idsToDelete.includes(item._id)}
                     />
                   </td>
                   <th>{i + 1}</th>
@@ -156,11 +147,15 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
           </div>
         </div>
       </div>
-      <div className="d-grid mb-3">
-        <button className="btn btn-danger btn-lg">
-          <i className="fa-solid fa-trash"></i> Delete 5 task
-        </button>
-      </div>
+
+      {idsToDelete.length > 0 && (
+        <div className="d-grid mb-3">
+          <button className="btn btn-danger btn-lg">
+            <i className="fa-solid fa-trash"></i> Delete {idsToDelete.length}
+            task(s)
+          </button>
+        </div>
+      )}
     </>
   );
 };
