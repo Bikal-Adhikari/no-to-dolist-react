@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
+import { deleteTasks } from "../utils/axiosHelper";
 
-export const Table = ({ entryList, switchTask, handOnDelete }) => {
+export const Table = ({ entryList, switchTask, fetchAllTasks }) => {
   const [idsToDelete, setIdsToDelete] = useState([]);
 
   const entries = entryList.filter((item) => item.type === "entry");
@@ -30,6 +31,17 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
     checked
       ? setIdsToDelete([...idsToDelete, ...ids])
       : setIdsToDelete(idsToDelete.filter((id) => !ids.includes(id)));
+  };
+
+  const handOnDelete = async (ids) => {
+    if (window.confirm("Are you sure, you want to delete the items?")) {
+      const { status, message } = await deleteTasks(ids);
+      if (status === "success") {
+        setIdsToDelete([]);
+        fetchAllTasks();
+        alert(message);
+      }
+    }
   };
 
   console.log(idsToDelete);
@@ -150,7 +162,10 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
 
       {idsToDelete.length > 0 && (
         <div className="d-grid mb-3">
-          <button className="btn btn-danger btn-lg">
+          <button
+            className="btn btn-danger btn-lg"
+            onClick={() => handOnDelete(idsToDelete)}
+          >
             <i className="fa-solid fa-trash"></i> Delete {idsToDelete.length}
             task(s)
           </button>

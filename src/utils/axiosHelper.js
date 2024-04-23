@@ -28,9 +28,13 @@ export const getAllTasks = async () => {
     };
   }
 };
-export const deleteTasks = async (obj) => {
+
+// ids must be an array when doing bulk delete
+export const deleteTasks = async (ids) => {
   try {
-    const { data } = await axios.delete(apiEP, { data: obj });
+    // send one id as params
+    //
+    const { data } = await axios.delete(apiEP, { data: ids });
     console.log(data);
     return data;
   } catch (error) {
