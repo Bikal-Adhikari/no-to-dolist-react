@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const apiEP = "http://localhost:8000/api/v1/tasks";
+// const apiEP = "http://localhost:8000/api/v1/tasks";
+// const apiEP = "https://nodejs-api-avn4.onrender.com/api/v1/tasks";
+const apiEP = import.meta.env.API_URL + "/api/v1/tasks";
 export const postNewTask = async (taskObj) => {
   try {
     const { data } = await axios.post(apiEP, taskObj);
