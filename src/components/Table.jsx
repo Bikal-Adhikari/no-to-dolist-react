@@ -1,9 +1,49 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useState } from "react";
 
 export const Table = ({ entryList, switchTask, handOnDelete }) => {
+  const [idsToDelete, setIdsToDelete] = useState([]);
+
   const entries = entryList.filter((item) => item.type === "entry");
   const badList = entryList.filter((item) => item.type === "bad");
+
+  const handelOnSelect = (e) => {
+    const { checked, value } = e.target;
+
+    if (checked) {
+      setIdsToDelete([...idsToDelete, value]);
+    } else {
+      //remove
+
+      setIdsToDelete(idsToDelete.filter((_id) => _id !== value));
+    }
+  };
+
+  const handelOnSelectAll = (e) => {
+    const { checked, value } = e.target;
+    console.log(checked, value);
+    if (value === "entry") {
+      if (checked) {
+        // get all ids of entry and add to Idsto delete
+        const allIds = entries.map((entry) => entry._id);
+        setIdsToDelete((prevIds) => [...prevIds, ...allIds]);
+      } else {
+        // remove all ids of entry and add to Idsto delete
+        setIdsToDelete([]);
+      }
+    }
+    if (value === "bad") {
+      if (checked) {
+        // get all ids of bad and add to Idstodelete
+        const allBadIds = badList.map((bad) => bad._id);
+        setIdsToDelete((prevIds) => [...prevIds, ...allBadIds]);
+      } else {
+        // remove all ids of bad and add to Idstodelete
+        setIdsToDelete([]);
+      }
+    }
+  };
+  console.log(idsToDelete);
 
   return (
     <>
@@ -17,6 +57,8 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
               type="checkbox"
               className="form-check-input"
               id="selectEntryList"
+              onChange={handelOnSelectAll}
+              value="entry"
             />
             <label htmlFor="selectEntryList">Select all entry list</label>
           </div>
@@ -25,7 +67,12 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
               {entries.map((item, i) => (
                 <tr key={item._id}>
                   <td>
-                    <input type="checkbox" className="form-check-input" />
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      onChange={handelOnSelect}
+                      value={item._id}
+                    />
                   </td>
                   <th>{i + 1}</th>
                   <td>{item.task}</td>
@@ -59,6 +106,8 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
               type="checkbox"
               className="form-check-input"
               id="selectEntryList"
+              onChange={handelOnSelectAll}
+              value="bad"
             />
             <label htmlFor="selectEntryList">Select all entry list</label>
           </div>
@@ -67,7 +116,12 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
               {badList.map((item, i) => (
                 <tr key={item._id}>
                   <td>
-                    <input type="checkbox" className="form-check-input" />
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      onChange={handelOnSelect}
+                      value={item._id}
+                    />
                   </td>
                   <th>{i + 1}</th>
                   <td>{item.task}</td>
@@ -103,7 +157,9 @@ export const Table = ({ entryList, switchTask, handOnDelete }) => {
         </div>
       </div>
       <div className="d-grid mb-3">
-        <button className="btn btn-danger btn-lg">Delete 5 task</button>
+        <button className="btn btn-danger btn-lg">
+          <i className="fa-solid fa-trash"></i> Delete 5 task
+        </button>
       </div>
     </>
   );
