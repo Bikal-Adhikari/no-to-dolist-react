@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import { useState } from "react";
 import { deleteTasks } from "../utils/axiosHelper";
 
 export const Table = ({ entryList, switchTask, fetchAllTasks }) => {
@@ -22,7 +22,6 @@ export const Table = ({ entryList, switchTask, fetchAllTasks }) => {
 
   const handelOnSelectAll = (e) => {
     const { checked, value } = e.target;
-    console.log(checked, value);
     const ids =
       value === "entry"
         ? entries.map((entry) => entry._id)
@@ -79,12 +78,6 @@ export const Table = ({ entryList, switchTask, fetchAllTasks }) => {
                   <td>{item.task}</td>
                   <td>{item.hr}hrs</td>
                   <td className="text-end">
-                    {/* <button
-                    onClick={() => handOnDelete(item._id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button> */}
                     <button
                       onClick={() => switchTask(item._id, "bad")}
                       className="btn btn-success btn-sm"
@@ -139,12 +132,6 @@ export const Table = ({ entryList, switchTask, fetchAllTasks }) => {
                     "
                       ></i>
                     </button>
-                    {/* <button
-                    onClick={() => handOnDelete(item._id)}
-                    className="btn btn-danger btn-sm"
-                  >
-                    <i className="fa-solid fa-trash"></i>
-                  </button> */}
                   </td>
                 </tr>
               ))}
